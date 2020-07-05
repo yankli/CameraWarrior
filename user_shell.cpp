@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     zcam_detect_on_board();
     zcam_dump_dev_info();
     user_cmd_handler(argc1, argv1);
+    zcam_release();
     
     return 0;
 }

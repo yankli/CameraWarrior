@@ -17,6 +17,7 @@ extern struct CLI_PARAM user_cli;
 int ZAPI zcam_detect_on_board(void);
 void ZAPI zcam_dump_dev_info(void);
 void ZAPI zcam_dump_driver_info(void);
+void ZAPI zcam_release(void);
 int ZAPI cam_read(int ch, TARGET_TYPE t, int addr, unsigned char* val);
 int ZAPI cam_write(int ch, TARGET_TYPE t, int addr, unsigned char val);
 int ZAPI cam_fburn(int ch, int addr, int size, unsigned char* buf);

@@ -94,6 +94,12 @@ int ZAPI zcam_dev_unregister(int ch)
     return false;
 }
 
+void ZAPI zcam_release(void)
+{
+    for (int ch = 0; ch < MAX_DEV_NUM; ch++)
+        zcam_dev_unregister(ch);
+
+}
 
 int zcam_dev_register(int ch, PCAM_DEV newdev)
 {

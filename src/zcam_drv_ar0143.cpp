@@ -128,7 +128,7 @@ static int ar0143_get_userdata(struct _drv_ops* drv, int bus, int slave, char *b
 {
     //TODO:
 
-    strcpy(str_ver, "this is user string of 0143");
+    strcpy(buf, "this is user string of 0143");
     return true;
 }
 

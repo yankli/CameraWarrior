@@ -117,13 +117,18 @@ static SCORE ar0143_probe(struct _drv_ops* drv, int bus, int slave)
 
 static int ar0143_get_version(struct _drv_ops* drv, int bus, int slave, char *str_ver)
 {
+    //TODO:
+
+    strcpy(str_ver, "this is verion string of 0143");
     return true;
 }
 
 
 static int ar0143_get_userdata(struct _drv_ops* drv, int bus, int slave, char *buf)
 {
+    //TODO:
 
+    strcpy(str_ver, "this is user string of 0143");
     return true;
 }
 

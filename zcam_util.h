@@ -61,17 +61,24 @@ enum {
     DET_NOMATCH = 0,
 };
 
-static inline void get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[])
+static inline int get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[],
+    int *argco, char *argvo[])
 {
 	int i = 0;
-	
-	while(i < argc) {
+	int old = 0;
+    *argco = argc;
+    int idx = 0;
+    argvo[0] = argv[0];
+
+    while(i < argc) {
+        old = i;
 		if (!strcmp(argv[i], "-l")) {
 			if (argc > i + 1) {
 				i += 1;
 				inst->log_level = atoi(argv[i]);
                 g_log_level = inst->log_level;
 				DPR(D, "user set log level:%u\n", inst->log_level);
+                *argco = *argco - 2;
 			}
 		}
 
@@ -79,11 +86,17 @@ static inline void get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[])
                 i += 1;
                 inst->force_bus_enum = atoi(argv[i]);
 				DPR(D, "Force to enumerate on bus:%u\n", inst->force_bus_enum);
+                *argco = *argco - 2;
 		}
 
-		i++;
+        i++;
+        if (i < argc)
+            argvo[++idx] = argv[i];
+
 	}
-	DPR(D, "\n\n\n");
+    DPR(D, "\n\n\n");
+
+    return 0;
 }
 
 static int shell_exec(const char *command, char *result_buf)

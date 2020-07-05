@@ -9,7 +9,7 @@ EXT_FLAGS += -DGLOG=4
 endif
 
 camera_warrior: *.cpp *.h
-	g++ $(EXT_FLAGS) -std=c++11 *.cpp -o $@
+	g++ $(EXT_FLAGS) -g -std=c++11 *.cpp -o $@
 
 clean:
 	rm -rf camera_warrior

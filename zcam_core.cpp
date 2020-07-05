@@ -154,8 +154,8 @@ void ZAPI zcam_dump_dev_info(void)
     for (int ch = 0; ch < MAX_DEV_NUM; ch++) {
         PCAM_DEV dev = g_dev_tbl[ch];
         if (dev)
-            DPR(D, "[+] dev_%d at[%d@%x]: [%s]\n",
-            dev->ch, dev->i2c_bus, dev->i2c_addr, dev->dev_type);
+            DPR(D, "[+] dev_%d at[%d@%x]: [%s] %p\n",
+            dev->ch, dev->i2c_bus, dev->i2c_addr, dev->dev_type, dev->drv);
     }
 }
 

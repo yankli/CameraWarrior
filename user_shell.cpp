@@ -3,7 +3,7 @@
 
 int user_cmd_handler(int argc, char** argv)
 {
-    DPR(DD, "user argS [%d]: %s %s  %s\n", argc, argv[0], argv[1], argv[2]);
+    //DPR(DD, "user argS [%d]: %s %s  %s\n", argc, argv[0], argv[1], argv[2]);
 
     if (strstr(argv[0], "ispreg")) {
         

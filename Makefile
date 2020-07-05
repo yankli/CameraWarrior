@@ -12,12 +12,13 @@ camera_warrior: src/*.cpp src/*.h
 	$(CC) $(EXT_FLAGS) -g -std=c++11 src/*.cpp -o $@
 
 install: camera_warrior FORCE
-	-@mkdir deploy; \
-	cd deploy; \
+	-@mkdir -p install; \
+	cd install; \
 	cp -rf ../boards ./; \
 	cp -rf ../cameras ./; \
 	cp -rf ../bin .; \
-	cp ../camera_warrior .; \
+	cp ../camera_warrior .
+	-cd install; \
 	ln -sf camera_warrior ispreg; \
 	ln -sf camera_warrior flashreg; \
 	ln -sf camera_warrior flasburn; \

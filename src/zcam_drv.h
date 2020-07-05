@@ -1,3 +1,10 @@
+/*************************************************************************
+    > File Name: zcam_drv.h
+    > Author: yank
+    > Mail: yanchang.li@congmutech.com 
+    > Created Time: 2020年07月04日 星期六 10时14分59秒
+ ************************************************************************/
+
 #ifndef __ZCAM_DRV_H_
 #define __ZCAM_DRV_H_
 
@@ -23,9 +30,6 @@ typedef struct _drv_ops {
 
 int zcam_drv_register(DRV_OPS *pdrv);
 
-/************************************************/
-/* 1. macro definition */
-
 #define MK_INIT_FUNC(mod) int zcam_drv_##mod##_init() \
 { \
     DPR(DDD, "zcam driver: ["#mod "] try to register.\n"); \
@@ -40,7 +44,6 @@ int zcam_drv_register(DRV_OPS *pdrv);
 
 #define BOOTING_CALL_MOD(mod) MK_INIT_FUNC(mod) \
     BOOTING_CALL_FUNC(mod, REF_INIT_FUNC(mod))
-
 
 
 #endif

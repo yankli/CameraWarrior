@@ -1,3 +1,9 @@
+/*************************************************************************
+    > File Name: zcam_dev.h
+    > Author: yank
+    > Mail: yanchang.li@congmutech.com 
+    > Created Time: 2020年07月04日 星期六 10时14分59秒
+ ************************************************************************/
 #ifndef __ZCAM_DEV_H_
 #define __ZCAM_DEV_H_
 
@@ -17,7 +23,6 @@ typedef struct _zcam_dev {
     _zcam_dev():match_score(0), drv(NULL), i2c_addr(-1){}
 
 } CAM_DEV, *PCAM_DEV;
-
 
 
 

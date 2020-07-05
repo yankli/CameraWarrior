@@ -1,30 +1,27 @@
 /*************************************************************************
-    > File Name: main.c
-    > Author: ma6174
-    > Mail: ma6174@163.com 
+    > File Name: zcam_core.c
+    > Author: yank
+    > Mail: yanchang.li@congmutech.com 
     > Created Time: 2020年07月04日 星期六 10时14分59秒
+**************************************************************************
+
+1.  use macro to define a func, or a class, then call them up.
+    after refine, this part can be processed simutaneously with BOOTING CALL,
+    MK_INIT_FUNC(ar0143) then BOOTING_CALL_FUNC(__func__), which can be merged
+    into one macro: BOOTING_CALL_MOD(ar0143)
+
+2.  call func by macro in each drv file, to make generator func and inject it
+    into global init function list.
+
+3.  in main file, enumerate drv generator function by name string, and invoke
+     each generator to populate drv objects
+
  ************************************************************************/
+
 #include "zcam_util.h"
 #include "zcam_drv.h"
 #include "zcam_dev.h"
 #include "zcam.h"
-
-
-/**************************************************/
-
-/* 1.   use macro to define a func, or a class, then call them up.
-        after refine, this part can be processed simutaneously with BOOTING CALL,
-
-        MK_INIT_FUNC(ar0143) then BOOTING_CALL_FUNC(__func__), which can be merged
-        into one macro: BOOTING_CALL_MOD(ar0143)
- */
-
-
-/* 2.   call func by macro in each drv file, to make generator func and inject it
-        into global init function list */
-
-/* 3.   in main file, enumerate drv generator function by name string, and invoke
-        each generator to populate drv objects */
 
 
 #define MAX_DRV_NUM 64
@@ -131,7 +128,6 @@ PCAM_DEV zcam_dev_get(int ch)
 }
 
 
-
 /*********************************************************************/
 
 int ZAPI zcam_drv_count()
@@ -187,7 +183,7 @@ int ZAPI zcam_detect_on_board(void)
             boards.size());
         
     if (boards.size() > 0) {
-        for (auto& bd : boards)
+        for (auto& bd : boards) {
             for (int i = 0; i < zcam_drv_count(); i++) {
                 PDRV_OPS drv = zcam_drv_get(i);
                 if (drv) {
@@ -223,10 +219,11 @@ int ZAPI zcam_detect_on_board(void)
                     } 
                 }
             }
+        }
     }
 
     DPR(D, "\t\t[enumeration done.]\n\n");
-
+    return true;
 }
 
 
@@ -308,7 +305,7 @@ int ZAPI cam_fdump(int ch, int addr, int size, unsigned char* buf)
 }
 
 
-int ZAPI cam_version(int ch, int addr, char *buf)
+int ZAPI cam_version(int ch, char *buf)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);
@@ -322,7 +319,7 @@ int ZAPI cam_version(int ch, int addr, char *buf)
 }
    
 
-int ZAPI cam_userdata(int ch, int addr, char *buf)
+int ZAPI cam_userdata(int ch, char *buf)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);

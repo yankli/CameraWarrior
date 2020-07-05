@@ -1,3 +1,10 @@
+/*************************************************************************
+    > File Name: zcam_drv_ov9706.cpp
+    > Author: yank
+    > Mail: yanchang.li@congmutech.com 
+    > Created Time: 2020年07月04日 星期六 10时14分59秒
+ ************************************************************************/
+
 #include "zcam_drv.h"
 #include <string>
 
@@ -37,7 +44,7 @@ static int ov9706_flashreg_wr(struct _drv_ops* drv, int bus, int slave,
 static int ov9706_flash_dump(struct _drv_ops* drv, int bus, int slave,
     int start, int bytes, unsigned char *buf)
 {
-    memset(buf, 0xff, bytes);
+    memset(buf, 0xab, bytes);
     DPR(DDD, "#\n");
     return true;
 }

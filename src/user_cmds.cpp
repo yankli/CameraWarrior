@@ -60,7 +60,7 @@ static int __cmd_ispreg_proc(int argc, char** argv)
         printf("%02x", val);
     } else if (argc == 4) {
         rc = cam_write(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
-        printf("%02x", val);
+        printf("%02x", strtol(argv[3], NULL, 16));
     }
 
     return rc;
@@ -77,7 +77,7 @@ int __cmd_flashreg_proc(int argc, char** argv)
         printf("%02x", val);
     } else if (argc == 4) {
         rc = cam_write(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
-        printf("%02x", val);
+        printf("%02x", strtol(argv[3], NULL, 16));
     }
 
     return rc;

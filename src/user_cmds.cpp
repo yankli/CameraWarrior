@@ -20,12 +20,12 @@ static int __cmd_userdata_proc(int argc, char** argv);
 ///////////////////////////////////////////////////////////////////////////
 
 static WORK_ITEM work_table[] = {
-    {   "ispreg",      __cmd_ispreg_proc      },
-    {   "flashreg",    __cmd_flashreg_proc    },
-    {   "flashburn",    __cmd_flashburn_proc    },
-    {   "flashdump",    __cmd_flashdump_proc    },
-    {   "zcv",          __cmd_version_proc    },
-    {   "zcu",          __cmd_userdata_proc    },
+    {   "ispreg",           __cmd_ispreg_proc           },
+    {   "flashreg",         __cmd_flashreg_proc         },
+    {   "flashburn",        __cmd_flashburn_proc        },
+    {   "flashdump",        __cmd_flashdump_proc        },
+    {   "zcv",              __cmd_version_proc          },
+    {   "zcu",              __cmd_userdata_proc         },
     {0}
 };
 
@@ -39,13 +39,9 @@ int ZAPI zcam_process_cmds(int argc, char *argv[])
             return work->handler(argc, argv);
         work++;
     }
-
     ER("user subcmd is not found!\n");
-
     return false;
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -59,10 +55,10 @@ static int __cmd_ispreg_proc(int argc, char** argv)
         rc = CamRead(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), &val);
         printf("%02x", val);
     } else if (argc == 4) {
-        rc = CamWrite(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
+        rc = CamWrite(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16),
+            strtol(argv[3], NULL, 16));
         printf("%02x", strtol(argv[3], NULL, 16));
     }
-
     return rc;
 }
 
@@ -76,10 +72,10 @@ int __cmd_flashreg_proc(int argc, char** argv)
         rc = CamRead(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), &val);
         printf("%02x", val);
     } else if (argc == 4) {
-        rc = CamWrite(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
+        rc = CamWrite(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16),
+            strtol(argv[3], NULL, 16));
         printf("%02x", strtol(argv[3], NULL, 16));
     }
-
     return rc;
 }
 
@@ -103,10 +99,10 @@ int __cmd_flashburn_proc(int argc, char** argv)
         }
         ifs.close();
         
-        rc = CamFburn(atoi(argv[1]), strtol(argv[2], NULL, 16), bytes, (unsigned char *)buf);
+        rc = CamFburn(atoi(argv[1]), strtol(argv[2], NULL, 16), bytes,
+            (unsigned char *)buf);
         return rc;
     }
-    
     return rc;
 }
 
@@ -115,13 +111,12 @@ int __cmd_flashdump_proc(int argc, char** argv)
     char buf[0x100000] = {0};
     int reg;
     int rc = false;
-    
 
     if (argc >= 4) {
-        rc = CamFdump(atoi(argv[1]), strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16), (unsigned char *)buf);
+        rc = CamFdump(atoi(argv[1]), strtol(argv[2], NULL, 16), strtol(argv[3],
+            NULL, 16), (unsigned char *)buf);
         write(1, buf, strtol(argv[3], NULL, 16));
     }
-    
     if (argc == 5) {
         std::ofstream ofs(argv[4], std::ios::binary);
         if (ofs) {
@@ -129,7 +124,6 @@ int __cmd_flashdump_proc(int argc, char** argv)
         }
         ofs.close();
     }
-    
     return rc;
 }
 
@@ -143,7 +137,6 @@ int __cmd_version_proc(int argc, char** argv)
         rc = CamVersion(atoi(argv[1]), ver_str);
         printf("%s", ver_str);   
     }
-    
     return rc;
 }
 
@@ -157,6 +150,5 @@ int __cmd_userdata_proc(int argc, char** argv)
         rc = CamUserdata(atoi(argv[1]), ver_str);
         printf("%s", ver_str);   
     }
-    
     return rc;
 }

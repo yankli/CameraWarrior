@@ -115,14 +115,13 @@ static inline int get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[],
                 *argco = *argco - 2;
 		}
 
-
         i++;
+
         if (i < argc)
             argvo[++idx] = argv[i];
 
 	}
     DPR(D, "\n\n\n");
-
     return 0;
 }
 
@@ -143,7 +142,6 @@ static int shell_exec(const char *command, char *result_buf)
     while(fgets(tmp_ret, sizeof(tmp_ret), fp) != NULL) {
         strcat(result_buf, tmp_ret);
     }
-    
     rc = pclose(fp);
     if(rc) {
         ER("[!!!] Exec error!! PLEASE CHECK commands!!: -->\n\t[%s] \n<--\n", command);
@@ -202,7 +200,6 @@ static std::vector<BD_CFG> get_board_cfg(void)
         bd_infos.clear();
         return bd_infos;
     }
-   
     
     std::string str_bd;
     int line = 0;
@@ -210,20 +207,17 @@ static std::vector<BD_CFG> get_board_cfg(void)
     
     while(std::getline(cfg_ifs, str_bd)) {
         line++;
-    
         std::stringstream ss(str_bd);
         std::string bus;
         std::string slave;
-        
+    
         ss >> bus >> slave;
         BD_CFG bd_cfg;
         bd_cfg.bus = atoi(bus.c_str());
         bd_cfg.slave = strtol(slave.c_str(), NULL, 16);
-        bd_cfg.ch = ch++;
-        
+        bd_cfg.ch = ch++;  
         bd_infos.push_back(bd_cfg);
     };
-
     return bd_infos;
 }
 

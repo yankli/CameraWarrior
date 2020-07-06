@@ -50,11 +50,11 @@ int zcam_drv_register(DRV_OPS *pdrv)
         return -1;
     
     g_drv_ops_tbl[g_drv_idx++] = *pdrv;
-    DPR(DDD,"zcam driver: [%s] registered at[%d], done.\n", pdrv->name, g_drv_idx);
+    DPR(DDD,"zcam driver: [%s] registered at[%d], done.\n",
+        pdrv->name, g_drv_idx);
     
     return 0;
 }
-
 
 PDRV_OPS zcam_drv_get(char *name)
 {
@@ -77,7 +77,6 @@ PDRV_OPS zcam_drv_get(int idx)
     return &g_drv_ops_tbl[idx];
 }
 
-
 int zcam_dev_unregister(int ch)
 {
     if (g_dev_tbl[ch] && g_dev_tbl[ch]->match_score >= 0) {
@@ -90,7 +89,6 @@ int zcam_dev_unregister(int ch)
 
     return false;
 }
-
 
 int zcam_dev_register(int ch, PCAM_DEV newdev)
 {
@@ -119,7 +117,6 @@ int zcam_dev_register(int ch, PCAM_DEV newdev)
     return true;
 }
 
-
 PCAM_DEV zcam_dev_get(int ch)
 {
     if (!g_dev_tbl[ch] || !g_dev_tbl[ch]->drv)
@@ -128,8 +125,8 @@ PCAM_DEV zcam_dev_get(int ch)
     return g_dev_tbl[ch];
 }
 
-
-/*********************************************************************/
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 void ZAPI zcam_release_all(void)
 {
@@ -159,6 +156,7 @@ void ZAPI zcam_dump_driver_info()
             DPR(D, "[+] supported camera types: [%s]\n", drv->name);
     }
 }
+
 
 void ZAPI zcam_dump_dev_info(void)
 {
@@ -235,6 +233,7 @@ int ZAPI zcam_detect_on_board(int bus_enum)
     return true;
 }
 
+
 int ZAPI zcam_force_online_camera(int ch, int bus, int slave, char* type)
 {
     int score = 1;
@@ -263,6 +262,7 @@ int ZAPI zcam_force_online_camera(int ch, int bus, int slave, char* type)
     }
     return zcam_dev_register(ch, new_dev);
 }
+
 
 int ZAPI CamRead(int ch, TARGET_TYPE t, int addr, unsigned char* val)
 {

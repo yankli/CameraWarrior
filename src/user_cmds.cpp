@@ -56,10 +56,10 @@ static int __cmd_ispreg_proc(int argc, char** argv)
     int rc = false;
 
     if (argc == 3) {
-        rc = cam_read(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), &val);
+        rc = CamRead(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), &val);
         printf("%02x", val);
     } else if (argc == 4) {
-        rc = cam_write(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
+        rc = CamWrite(atoi(argv[1]), TARGET_ISP, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
         printf("%02x", strtol(argv[3], NULL, 16));
     }
 
@@ -73,10 +73,10 @@ int __cmd_flashreg_proc(int argc, char** argv)
     int rc = false;
 
     if (argc == 3) {
-        rc = cam_read(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), &val);
+        rc = CamRead(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), &val);
         printf("%02x", val);
     } else if (argc == 4) {
-        rc = cam_write(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
+        rc = CamWrite(atoi(argv[1]), TARGET_FLASH, strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16));
         printf("%02x", strtol(argv[3], NULL, 16));
     }
 
@@ -103,7 +103,7 @@ int __cmd_flashburn_proc(int argc, char** argv)
         }
         ifs.close();
         
-        rc = cam_fburn(atoi(argv[1]), strtol(argv[2], NULL, 16), bytes, (unsigned char *)buf);
+        rc = CamFburn(atoi(argv[1]), strtol(argv[2], NULL, 16), bytes, (unsigned char *)buf);
         return rc;
     }
     
@@ -118,7 +118,7 @@ int __cmd_flashdump_proc(int argc, char** argv)
     
 
     if (argc >= 4) {
-        rc = cam_fdump(atoi(argv[1]), strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16), (unsigned char *)buf);
+        rc = CamFdump(atoi(argv[1]), strtol(argv[2], NULL, 16), strtol(argv[3], NULL, 16), (unsigned char *)buf);
         write(1, buf, strtol(argv[3], NULL, 16));
     }
     
@@ -140,7 +140,7 @@ int __cmd_version_proc(int argc, char** argv)
     int rc = false;
 
     if (argc == 2) {
-        rc = cam_version(atoi(argv[1]), ver_str);
+        rc = CamVersion(atoi(argv[1]), ver_str);
         printf("%s", ver_str);   
     }
     
@@ -154,7 +154,7 @@ int __cmd_userdata_proc(int argc, char** argv)
     int rc = false;
 
     if (argc == 2) {
-        rc = cam_userdata(atoi(argv[1]), ver_str);
+        rc = CamUserdata(atoi(argv[1]), ver_str);
         printf("%s", ver_str);   
     }
     

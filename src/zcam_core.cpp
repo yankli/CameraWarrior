@@ -78,7 +78,7 @@ PDRV_OPS zcam_drv_get(int idx)
 }
 
 
-int ZAPI zcam_dev_unregister(int ch)
+int zcam_dev_unregister(int ch)
 {
     if (g_dev_tbl[ch] && g_dev_tbl[ch]->match_score >= 0) {
         DPR(D, "-- dev [%d] released!!\n", ch);
@@ -91,12 +91,6 @@ int ZAPI zcam_dev_unregister(int ch)
     return false;
 }
 
-void ZAPI zcam_release(void)
-{
-    for (int ch = 0; ch < MAX_DEV_NUM; ch++)
-        zcam_dev_unregister(ch);
-
-}
 
 int zcam_dev_register(int ch, PCAM_DEV newdev)
 {
@@ -130,6 +124,14 @@ PCAM_DEV zcam_dev_get(int ch)
 
 /*********************************************************************/
 
+void ZAPI CameraReleaseAll(void)
+{
+    for (int ch = 0; ch < MAX_DEV_NUM; ch++)
+        zcam_dev_unregister(ch);
+
+}
+
+
 int ZAPI zcam_drv_count()
 {
     return g_drv_idx;
@@ -162,7 +164,7 @@ void ZAPI zcam_dump_dev_info(void)
 }
 
 
-int ZAPI zcam_detect_on_board(void)
+int ZAPI CameraDetectOnBoard(void)
 {
     zcam_dump_driver_info();
     
@@ -227,7 +229,7 @@ int ZAPI zcam_detect_on_board(void)
 }
 
 
-int ZAPI cam_read(int ch, TARGET_TYPE t, int addr, unsigned char* val)
+int ZAPI CamRead(int ch, TARGET_TYPE t, int addr, unsigned char* val)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);
@@ -252,7 +254,7 @@ int ZAPI cam_read(int ch, TARGET_TYPE t, int addr, unsigned char* val)
 }
 
 
-int ZAPI cam_write(int ch, TARGET_TYPE t, int addr, unsigned char val)
+int ZAPI CamWrite(int ch, TARGET_TYPE t, int addr, unsigned char val)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);
@@ -277,7 +279,7 @@ int ZAPI cam_write(int ch, TARGET_TYPE t, int addr, unsigned char val)
 }
 
 
-int ZAPI cam_fburn(int ch, int addr, int size, unsigned char* buf)
+int ZAPI CamFburn(int ch, int addr, int size, unsigned char* buf)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);
@@ -291,7 +293,7 @@ int ZAPI cam_fburn(int ch, int addr, int size, unsigned char* buf)
 }
    
 
-int ZAPI cam_fdump(int ch, int addr, int size, unsigned char* buf)
+int ZAPI CamFdump(int ch, int addr, int size, unsigned char* buf)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);
@@ -305,7 +307,7 @@ int ZAPI cam_fdump(int ch, int addr, int size, unsigned char* buf)
 }
 
 
-int ZAPI cam_version(int ch, char *buf)
+int ZAPI CamVersion(int ch, char *buf)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);
@@ -319,7 +321,7 @@ int ZAPI cam_version(int ch, char *buf)
 }
    
 
-int ZAPI cam_userdata(int ch, char *buf)
+int ZAPI CamUserdata(int ch, char *buf)
 {
     int rc = false;
     PCAM_DEV pdev = zcam_dev_get(ch);

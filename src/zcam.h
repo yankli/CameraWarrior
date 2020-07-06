@@ -21,16 +21,16 @@ enum TARGET_TYPE {
 
 extern struct CLI_PARAM user_cli;
 
-int ZAPI zcam_detect_on_board(void);
+int ZAPI CameraDetectOnBoard(void);
+void ZAPI CameraReleaseAll(void);
+int ZAPI CamRead(int ch, TARGET_TYPE t, int addr, unsigned char* val);
+int ZAPI CamWrite(int ch, TARGET_TYPE t, int addr, unsigned char val);
+int ZAPI CamFburn(int ch, int addr, int size, unsigned char* buf);
+int ZAPI CamFdump(int ch, int addr, int size, unsigned char* buf);
+int ZAPI CamVersion(int ch, char *buf);
+int ZAPI CamUserdata(int ch, char *buf);
 void ZAPI zcam_dump_dev_info(void);
 void ZAPI zcam_dump_driver_info(void);
-void ZAPI zcam_release(void);
-int ZAPI cam_read(int ch, TARGET_TYPE t, int addr, unsigned char* val);
-int ZAPI cam_write(int ch, TARGET_TYPE t, int addr, unsigned char val);
-int ZAPI cam_fburn(int ch, int addr, int size, unsigned char* buf);
-int ZAPI cam_fdump(int ch, int addr, int size, unsigned char* buf);
-int ZAPI cam_version(int ch, char *buf);
-int ZAPI cam_userdata(int ch, char *buf);
 
 typedef int (*CMDHDL) (int argc, char *argv[]);
 

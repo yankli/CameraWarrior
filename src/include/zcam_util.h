@@ -71,6 +71,12 @@ enum {
     DET_NOMATCH = 0,
 };
 
+#define WORK_PATH ({ \
+char *wkpath; \
+wkpath = getenv("ZCAMPATH"); \
+wkpath? wkpath:""; \
+})
+
 static inline int get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[],
     int *argco, char *argvo[])
 {
@@ -190,7 +196,8 @@ static std::vector<BD_CFG> get_board_cfg(void)
         std::getline(bdifs, bd_name);
     }
     bdifs.close();
-    std::string bd_string = std::string("./boards/bd_")
+    std::string bd_string = std::string(WORK_PATH)
+        + std::string("./boards/bd_")
         + bd_name + std::string("_cfg.txt");
     
     std::ifstream cfg_ifs(bd_string.c_str());

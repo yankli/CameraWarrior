@@ -72,8 +72,12 @@ static SCORE ar0143_probe(struct _drv_ops* drv, int bus, int slave)
     std::vector<unsigned int> probe_iregs;
     std::vector<unsigned int> probe_fregs;
     
-    probe_iregs = get_cam_cfg_regs((std::string("./cameras/") + std::string(drv->name) + std::string("_cfg.txt")).c_str(), 1);
-    probe_fregs = get_cam_cfg_regs((std::string("./cameras/") + std::string(drv->name) + std::string("_cfg.txt")).c_str(), 2);
+    probe_iregs = get_cam_cfg_regs((std::string(WORK_PATH) +
+        std::string("./cameras/") + std::string(drv->name) +
+        std::string("_cfg.txt")).c_str(), 1);
+    probe_fregs = get_cam_cfg_regs((std::string(WORK_PATH) +
+        std::string("./cameras/") + std::string(drv->name) +
+        std::string("_cfg.txt")).c_str(), 2);
     
     DPR(DDD, "ar0143 iregs size %d\n", probe_iregs.size());
     DPR(DDD, "ar0143 fregs size %d\n", probe_fregs.size());
@@ -104,7 +108,7 @@ static SCORE ar0143_probe(struct _drv_ops* drv, int bus, int slave)
         return DET_NOI2C;
 
     char exec_ret[1024] = {0};
-    std::string eval_cmd = "./bin/ar0143_verify.sh " + cmd_param;
+    std::string eval_cmd = std::string(WORK_PATH) + "./bin/ar0143_verify.sh " + cmd_param;
     if (0 != shell_exec(eval_cmd.c_str(), exec_ret)) {
         ER("ar0143 evaluation error!\n");
         return DET_NOMATCH;

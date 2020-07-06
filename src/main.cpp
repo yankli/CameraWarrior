@@ -21,6 +21,8 @@
 int main(int argc, char *argv[])
 {
     
+    //////////////////// Example.1 user CLI /////////////////////////////
+
     int argc1 = 0;
     char *argv1[128] = {0};
 
@@ -34,7 +36,7 @@ int main(int argc, char *argv[])
     "\t\t[f] Use -f <bus_id> to force search\n"
     "\t\t[s] Use -s ch,bus,addr,cam_name to set dev.\n"
     "\t\t[l] Use -l loglevel to set loglevel.\n"
-    "\n\n", __DATE__ __TIME__, __BUSER__);
+    "\n\n", __DATE__ , __BUSER__);
     
   
     zcam_detect_on_board(user_cli.bus_enum);
@@ -48,6 +50,13 @@ int main(int argc, char *argv[])
     zcam_dump_dev_info();
 
     zcam_process_cmds(argc1, argv1);
+
+
+    //////////////////// Example.2 ZCAM API /////////////////////////////
+
+    unsigned char val = 2;
+    int ret = CamRead(0, TARGET_ISP, 0, &val);
+    printf("val: %d, ret: %d\n", val, ret);
     
     zcam_release_all();
     

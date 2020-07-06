@@ -183,7 +183,8 @@ int ZAPI zcam_detect_on_board(int bus_enum)
         }
     } else if (bus_enum >= 0) {
         DPR(D, "try to use board config file...\n");
-        boards = get_board_cfg();   
+        boards = get_board_cfg();
+        DPR(D, "[%d] entries in config file.\n", boards.size());
     }
     
     DPR(D, "enumerating...\n",
@@ -229,7 +230,7 @@ int ZAPI zcam_detect_on_board(int bus_enum)
         }
     }
 
-    DPR(D, "enumeration done.\n\n");
+    DPR(D, "enumeration done. [%d] found\n\n", zcam_dev_count());
     return true;
 }
 

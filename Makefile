@@ -1,6 +1,6 @@
 all: camera_warrior
 CC := arm-linux-gnueabihf-g++
-EXT_FLAGS :=
+EXT_FLAGS := -I./src/include
 
 ifneq ($(LOG),)
 EXT_FLAGS += -DGLOG=$(LOG)
@@ -8,8 +8,8 @@ else
 EXT_FLAGS += -DGLOG=4
 endif
 
-camera_warrior: src/*.cpp src/*.h
-	$(CC) $(EXT_FLAGS) -g -std=c++11 src/*.cpp -o $@
+camera_warrior: src/*.cpp src/core/*.cpp src/drivers/*.cpp src/include/*.h
+	$(CC) $(EXT_FLAGS) -g -std=c++11 $^ -o $@
 
 install: camera_warrior FORCE
 	-@mkdir -p install; \

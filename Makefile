@@ -14,8 +14,10 @@ endif
 camera_warrior: src/*.cpp src/drivers/*.cpp src/include/*.h libzcam.so
 	$(CC) $(EXT_FLAGS) -g -std=c++11 $^ -L. -lzcam -o $@
 
+ifneq ($(wildcard src/core/*.cpp),)
 libzcam.so: src/core/*.cpp src/include/*.h
 	$(CC) $(EXT_FLAGS) -fPIC -shared -g -std=c++11 $^ -o $@
+endif
 
 install: camera_warrior libzcam.so FORCE
 	-@mkdir -p install; \

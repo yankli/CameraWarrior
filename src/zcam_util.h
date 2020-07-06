@@ -38,10 +38,17 @@ else \
 struct CLI_PARAM {
 
     int log_level;
-    int force_bus_enum;
+    int bus_enum;
+    int force_dev;
+    struct FDEV_INFO {
+        int ch;
+        int bus;
+        int slave;
+        char name[64];
+    } force_info;
 
 public:
-    CLI_PARAM(): log_level(-1), force_bus_enum(-1){}
+    CLI_PARAM(): log_level(-1), bus_enum(0), force_dev(0){}
 };
 
 typedef struct _bd_cfg {
@@ -82,12 +89,29 @@ static inline int get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[],
 			}
 		}
 
-		if (!strcmp(argv[i], "-f")) {
+		if (!strcmp(argv[i], "-b")) {
                 i += 1;
-                inst->force_bus_enum = atoi(argv[i]);
-				DPR(D, "Force to enumerate on bus:%u\n", inst->force_bus_enum);
+                inst->bus_enum = atoi(argv[i]);
+				DPR(D, "Force to enumerate on bus:%u\n", inst->bus_enum);
+
                 *argco = *argco - 2;
 		}
+
+        if (!strcmp(argv[i], "-s")) {
+                i += 1;
+                inst->force_dev = 1;
+				DPR(D, "has force setting info: %s\n", argv[i]);
+                if (sscanf(argv[i], "%d,%d,%x,%s", &inst->force_info.ch,
+                &inst->force_info.bus, 
+                &inst->force_info.slave,
+                &inst->force_info.name) != 4)
+                    PR("force setting info error!");
+                else
+                    DPR(D,"force setting info ok.");
+            
+                *argco = *argco - 2;
+		}
+
 
         i++;
         if (i < argc)

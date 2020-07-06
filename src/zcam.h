@@ -21,8 +21,9 @@ enum TARGET_TYPE {
 
 extern struct CLI_PARAM user_cli;
 
-int ZAPI CameraDetectOnBoard(void);
-void ZAPI CameraReleaseAll(void);
+int ZAPI zcam_detect_on_board(int bus);
+void ZAPI zcam_release_all(void);
+int ZAPI zcam_force_online_camera(int ch, int bus, int slave, char* type);
 int ZAPI CamRead(int ch, TARGET_TYPE t, int addr, unsigned char* val);
 int ZAPI CamWrite(int ch, TARGET_TYPE t, int addr, unsigned char val);
 int ZAPI CamFburn(int ch, int addr, int size, unsigned char* buf);

@@ -40,7 +40,7 @@ int ZAPI zcam_process_cmds(int argc, char *argv[])
         work++;
     }
 
-    PR("user subcmd is invalid!\n");
+    PR("user subcmd is not found!\n");
 
     return false;
 }

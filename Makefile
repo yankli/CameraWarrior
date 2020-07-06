@@ -21,13 +21,13 @@ install: camera_warrior FORCE
 	-cd install; \
 	ln -sf camera_warrior ispreg; \
 	ln -sf camera_warrior flashreg; \
-	ln -sf camera_warrior flasburn; \
+	ln -sf camera_warrior flashburn; \
 	ln -sf camera_warrior flashdump; \
 	ln -sf camera_warrior zcv; \
 	ln -sf camera_warrior zcu
 
 clean:
 	rm -rf camera_warrior
-	rm -rf deploy
+	rm -rf install
 
 .PHONY: clean FORCE

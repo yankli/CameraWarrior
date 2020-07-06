@@ -34,6 +34,9 @@ else \
     PR_((1),fmt,##arg); \
 }while(0)
 
+#define ER(fmt,arg...) do { \
+    dprintf(2,"[!!!***ZCAM ERR:](%s) " fmt,__func__,##arg); \
+}while(0)
 
 struct CLI_PARAM {
 
@@ -105,7 +108,7 @@ static inline int get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[],
                 &inst->force_info.bus, 
                 &inst->force_info.slave,
                 &inst->force_info.name) != 4)
-                    PR("force setting info error!");
+                    ER("force setting info error!");
                 else
                     DPR(D,"force setting info ok.");
             
@@ -130,7 +133,7 @@ static int shell_exec(const char *command, char *result_buf)
 
     fp = popen(command, "r");
     if(NULL == fp) {
-        PR("popen exec error!! invalid script file\n");
+        ER("popen exec error!! invalid script file\n");
         return -1;
     }
 
@@ -143,7 +146,7 @@ static int shell_exec(const char *command, char *result_buf)
     
     rc = pclose(fp);
     if(rc) {
-        PR("[!!!] Exec error!! PLEASE CHECK commands!!: -->\n\t[%s] \n<--\n", command);
+        ER("[!!!] Exec error!! PLEASE CHECK commands!!: -->\n\t[%s] \n<--\n", command);
         return -1;
     }
 	return rc;
@@ -155,7 +158,7 @@ static std::vector<unsigned int> get_cam_cfg_regs(const char *file, int line_num
     std::ifstream cfg_ifs(file);
     if (!cfg_ifs) {
         regs.clear();
-        PR("open config file %s error!!\n", file);
+        ER("open config file %s error!!\n", file);
         return regs;
     }
 

@@ -106,7 +106,7 @@ static SCORE ar0143_probe(struct _drv_ops* drv, int bus, int slave)
     char exec_ret[1024] = {0};
     std::string eval_cmd = "./bin/ar0143_verify.sh " + cmd_param;
     if (0 != shell_exec(eval_cmd.c_str(), exec_ret)) {
-        PR("ar0143 evaluation error!\n");
+        ER("ar0143 evaluation error!\n");
         return DET_NOMATCH;
     } else {
         score = atoi(exec_ret);

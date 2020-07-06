@@ -12,8 +12,11 @@ int main(int argc, char *argv[])
     if (user_cli.log_level > 0)
         g_log_level = user_cli.log_level;
     
-    DPR(D, "\t\t^^^^^^^^^^^^^^^^^^^^^\n"
-    "\t\t[h] Use -f to force search\n\t\tUse -l 0 to be quiet!\n\n\n");
+    DPR(D, "\t\t************* HELP *************\n"
+    "\t\t[f] Use -f <bus_id> to force search\n"
+    "\t\t[s] Use -s ch,bus,addr,cam_name to set dev.\n"
+    "\t\t[l] Use -l loglevel to set loglevel.\n"
+    "\n\n");
     
     zcam_detect_on_board(user_cli.bus_enum);
     

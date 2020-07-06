@@ -81,7 +81,7 @@ PDRV_OPS zcam_drv_get(int idx)
 int zcam_dev_unregister(int ch)
 {
     if (g_dev_tbl[ch] && g_dev_tbl[ch]->match_score >= 0) {
-        DPR(D, "-- dev [%d] released!!\n", ch);
+        DPR(D, "[-] dev_%d released!!\n", ch);
         delete(g_dev_tbl[ch]);
         g_dev_tbl[ch] = NULL;
         g_dev_idx--;
@@ -98,22 +98,22 @@ int zcam_dev_register(int ch, PCAM_DEV newdev)
 
     if (newdev->ch < 0 || newdev->ch > MAX_DEV_NUM - 1
         || newdev->i2c_addr < 0) {
-        DPR(D, "**new dev_%d info incorrect! i2caddr: %d!!\n",
+        PR("**new dev_%d info incorrect! i2caddr: %d!!\n",
             newdev->i2c_addr);
         return false;
         }
         
 
     if (g_dev_tbl[ch] == NULL) {
-        DPR(D, "**new dev [%d] populated!\n", ch);
+        DPR(DD, "**new dev [%d] populated!\n", ch);
         g_dev_tbl[ch] = newdev;
         g_dev_idx++;
     } else if (newdev->match_score > g_dev_tbl[ch]->match_score) {
-        DPR(D, "**new dev [%d] replaced!!\n", ch);
+        DPR(DD, "**new dev [%d] replaced!!\n", ch);
         delete(g_dev_tbl[ch]);
         g_dev_tbl[ch] = newdev;
     } else
-        DPR(D, "**new dev score too low[%d < %d]!!\n",
+        DPR(DD, "**new dev score too low[%d < %d]!!\n",
         newdev->match_score, g_dev_tbl[ch]->match_score);
 
     return true;
@@ -188,7 +188,7 @@ int ZAPI zcam_detect_on_board(int bus_enum)
         boards = get_board_cfg();   
     }
     
-    DPR(D, "\n\nxxxx [%d cameras configured, enumerating...] xxxx\n",
+    DPR(D, "enumerating...\n",
             boards.size());
         
     if (boards.size() > 0) {
@@ -198,7 +198,7 @@ int ZAPI zcam_detect_on_board(int bus_enum)
                 if (drv) {
                     int score = drv->probe(drv, bd.bus, bd.slave);
                     if (score > DET_NOMATCH) {
-                        DPR(D, "[+++] [%s] <-match-> [%d@%x] score:%d\n",
+                        DPR(DD, "[+++] [%s] <-match-> [%d@%x] score:%d\n",
                         drv->name, bd.bus, bd.slave, score);
                         CAM_DEV *new_dev = new CAM_DEV;
                         new_dev->i2c_bus = bd.bus;
@@ -231,7 +231,7 @@ int ZAPI zcam_detect_on_board(int bus_enum)
         }
     }
 
-    DPR(D, "\t\t[enumeration done.]\n\n");
+    DPR(D, "enumeration done.\n\n");
     return true;
 }
 
@@ -257,7 +257,11 @@ int ZAPI zcam_force_online_camera(int ch, int bus, int slave, char* type)
     DPR(D, "force dev_%d info: [%s, %d@%x],score=%d]\n",
         new_dev->ch, new_dev->dev_type, new_dev->i2c_bus,
         new_dev->i2c_addr, new_dev->match_score);
-    zcam_dev_register(ch, new_dev);
+    if (!new_dev->drv) {
+        ER("invalid force camera name!!\n");
+        return false;
+    }
+    return zcam_dev_register(ch, new_dev);
 }
 
 int ZAPI CamRead(int ch, TARGET_TYPE t, int addr, unsigned char* val)
@@ -266,7 +270,7 @@ int ZAPI CamRead(int ch, TARGET_TYPE t, int addr, unsigned char* val)
     PCAM_DEV pdev = zcam_dev_get(ch);
 
     if (!pdev) {
-        PR("[!ERROR!] Device [%d] not exist!\n", ch);
+        ER("[!ERROR!] Device [%d] not exist!\n", ch);
         return false;
     }
     switch(t) {
@@ -291,7 +295,7 @@ int ZAPI CamWrite(int ch, TARGET_TYPE t, int addr, unsigned char val)
     PCAM_DEV pdev = zcam_dev_get(ch);
 
     if (!pdev) {
-        PR("[!ERROR!] Device [%d] not exist!\n", ch);
+        ER("[!ERROR!] Device [%d] not exist!\n", ch);
         return false;
     }
     switch(t) {
@@ -316,7 +320,7 @@ int ZAPI CamFburn(int ch, int addr, int size, unsigned char* buf)
     PCAM_DEV pdev = zcam_dev_get(ch);
 
     if (!pdev) {
-        PR("[!ERROR!] Device [%d] not exist!\n", ch);
+        ER("[!ERROR!] Device [%d] not exist!\n", ch);
         return false;
     }
 
@@ -330,7 +334,7 @@ int ZAPI CamFdump(int ch, int addr, int size, unsigned char* buf)
     PCAM_DEV pdev = zcam_dev_get(ch);
 
     if (!pdev) {
-        PR("[!ERROR!] Device [%d] not exist!\n", ch);
+        ER("[!ERROR!] Device [%d] not exist!\n", ch);
         return false;
     }
 
@@ -344,7 +348,7 @@ int ZAPI CamVersion(int ch, char *buf)
     PCAM_DEV pdev = zcam_dev_get(ch);
 
     if (!pdev) {
-        PR("[!ERROR!] Device [%d] not exist!\n", ch);
+        ER("[!ERROR!] Device [%d] not exist!\n", ch);
         return false;
     }
     return pdev->drv->get_version(pdev->drv, pdev->i2c_bus, pdev->i2c_addr, buf);
@@ -358,7 +362,7 @@ int ZAPI CamUserdata(int ch, char *buf)
     PCAM_DEV pdev = zcam_dev_get(ch);
 
     if (!pdev) {
-        PR("[!ERROR!] Device [%d] not exist!\n", ch);
+        ER("[!ERROR!] Device [%d] not exist!\n", ch);
         return false;
     }
     return pdev->drv->get_userdata(pdev->drv, pdev->i2c_bus, pdev->i2c_addr, buf);

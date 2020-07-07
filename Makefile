@@ -21,6 +21,7 @@ endif
 
 new: src/drivers/zcam_drv_ar0143.cpp
 	cp ./src/drivers/zcam_drv_ar0143.cpp ./src/drivers/zcam_drv_$(N).cpp
+	cp ./bin/ar0143_verify.sh ./bin/$(N)_verify.sh.cpp
 	sed -i 's/ar0143/$(N)/g' ./src/drivers/zcam_drv_$(N).cpp
 
 install: camera_warrior libzcam.so FORCE

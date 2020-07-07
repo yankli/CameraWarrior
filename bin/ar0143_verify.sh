@@ -11,6 +11,6 @@
 
 vreg1=ZCREGI_9c20
 vreg2=ZCREGI_9c21
-#let "ret=${vreg1}&${vreg2}"
-echo 10
+let "ret=${vreg1}&${vreg2}"
+echo ${ret}
 exit 0

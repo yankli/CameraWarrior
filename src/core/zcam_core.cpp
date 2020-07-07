@@ -368,10 +368,3 @@ int ZAPI CamUserdata(int ch, char *buf)
     }
     return pdev->drv->get_userdata(pdev->drv, pdev->i2c_bus, pdev->i2c_addr, buf);
 }
-   
-
-   
-
-   
-
-   

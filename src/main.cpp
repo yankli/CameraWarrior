@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
     unsigned char val = 2;
     int ret = CamRead(0, TARGET_ISP, 0, &val);
-    printf("val: %d, ret: %d\n", val, ret);
+    printf("val: %d, ret: %s\n", val, ret? "TRUE":"FALSE");
     
     zcam_release_all();
     

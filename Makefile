@@ -19,13 +19,17 @@ libzcam.so: src/core/*.cpp src/include/*.h
 	$(CC) $(EXT_FLAGS) -fPIC -shared -g -std=c++11 $^ -o $@
 endif
 
+new: src/drivers/zcam_drv_ar0143.cpp
+	cp ./src/drivers/zcam_drv_ar0143.cpp ./src/drivers/zcam_drv_$(N).cpp
+	sed -i 's/ar0143/$(N)/g' ./src/drivers/zcam_drv_$(N).cpp
+
 install: camera_warrior libzcam.so FORCE
 	-@mkdir -p install; \
 	cd install; \
 	cp -rf ../boards ./; \
 	cp -rf ../cameras ./; \
 	cp -rf ../bin .; \
-	cp ../camera_warrior . \
+	cp ../camera_warrior . ;\
 	cp ../libzcam.so .
 	-cd install; \
 	ln -sf camera_warrior ispreg; \

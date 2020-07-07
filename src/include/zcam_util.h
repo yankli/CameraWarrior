@@ -9,7 +9,12 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <map>
+#include <iostream>
 
+#include <string>
+#include <regex>
+#include <iterator>
 extern int g_log_level;
 
 #define D       4
@@ -73,8 +78,11 @@ enum {
 
 #define WORK_PATH ({ \
 char *wkpath; \
+char wkpath2[1024] = {0}; \
 wkpath = getenv("ZCAMPATH"); \
-wkpath? wkpath:""; \
+if(wkpath) strcpy(wkpath2, wkpath); else strcpy(wkpath2, "./"); \
+if (wkpath2[strlen(wkpath2)] != '/') strcat(wkpath2, "/"); \
+wkpath2; \
 })
 
 static inline int get_cli_opt(struct CLI_PARAM *inst, int argc, char *argv[],
@@ -150,7 +158,7 @@ static int shell_exec(const char *command, char *result_buf)
     }
     rc = pclose(fp);
     if(rc) {
-        ER("[!!!] Exec error!! PLEASE CHECK commands!!: -->\n\t[%s] \n<--\n", command);
+        ER("[!!!] Exec error!! CHECK commands!!: -->\n\t[%s] \n<--\n", command);
         return -1;
     }
 	return rc;
@@ -183,6 +191,79 @@ static std::vector<unsigned int> get_cam_cfg_regs(const char *file, int line_num
     cfg_ifs.close();
 
     return regs;
+}
+
+static std::map<std::string, unsigned int> get_script_regs(
+    const char *file, char* prefix)
+{
+    std::map<std::string, unsigned int> regs;
+    std::ifstream cfg_ifs(file);
+    if (!cfg_ifs) {
+        regs.clear();
+        ER("open config file %s error!!\n", file);
+        return regs;
+    }
+
+    std::string str_line;
+    int line = 0;
+
+    while(std::getline(cfg_ifs, str_line)) {
+            
+            int reg;
+            int pos;
+            int len = strlen(prefix);
+            
+            if ((pos = str_line.find(std::string(prefix))) >= 0) {
+                const char *trim_line = str_line.substr(pos + len).c_str();
+                if (sscanf(trim_line, "%x", &reg) > 0) {
+                    regs[str_line.substr(pos)] = reg;
+                }
+            }
+    }
+    cfg_ifs.close();
+    return regs;
+}
+
+
+static std::string set_script_regs(
+    const char *file, 
+    std::map<std::string, unsigned int> regmapi,
+    std::map<std::string, unsigned int> regmapf)
+{
+    std::string new_script_string;
+
+    std::ifstream cfg_ifs(file);
+    if (!cfg_ifs) {
+        ER("open config file %s error!!\n", file);
+        return "";
+    }
+
+    std::string str_line;
+    int line = 0;
+    while(std::getline(cfg_ifs, str_line)) {
+        new_script_string += str_line + "\n";
+    }
+    cfg_ifs.close();
+
+    for (auto& regs : regmapi) {
+        char val_hex[8] = {0};
+        sprintf(val_hex, "0x%02x", regs.second);
+
+        std::regex re(regs.first);
+        new_script_string = std::regex_replace(new_script_string,
+            re,std::string(val_hex));        
+    }
+
+    for (auto& regs : regmapf) {
+        char val_hex[8] = {0};
+        sprintf(val_hex, "0x%02x", regs.second);
+
+        std::regex re(regs.first);
+        new_script_string = std::regex_replace(new_script_string,
+            re,std::string(val_hex));        
+    }
+
+    return new_script_string;
 }
 
 

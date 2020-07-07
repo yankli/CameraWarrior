@@ -9,6 +9,8 @@
 #include <string>
 #include <iostream>
 
+#define veri_file (std::string(WORK_PATH) + \
+    std::string("bin/ar0143_verify.sh")).c_str()
 
 static int ar0143_ispreg_rd(struct _drv_ops* drv, int bus, int slave, 
     unsigned int reg, unsigned char* val)
@@ -64,14 +66,64 @@ static int ar0143_flash_burn(struct _drv_ops* drv, int bus, int slave,
     return true;
 }
 
+
 static SCORE ar0143_probe(struct _drv_ops* drv, int bus, int slave)
 {
     int score = DET_NOMATCH;
+    int i2c_ok = 0;
+
+    auto regmapi = get_script_regs(veri_file, "ZCREGI_");
+    
+    DPR(DD, "check isp regs... \n");
+    
+    for (auto& reg : regmapi) {
+        int reg_addr = reg.second;
+        unsigned char val;
+        if (drv->ireg_r(drv, bus, slave, reg_addr, &val)) {
+            i2c_ok++;
+            regmapi[reg.first] = (unsigned int)val;
+        }  
+
+        DPR(DD, "\t%x = %02x\n",reg_addr, val);
+    }
+    DPR(DD, "\n");
+
+    auto regmapf = get_script_regs(veri_file, "ZCREGF_");
+    
+    DPR(DD, "check flash regs... \n");
+    
+    for (auto& reg : regmapf) {
+        int reg_addr = reg.second;
+        unsigned char val;
+        if (drv->freg_r(drv, bus, slave, reg_addr, &val)) {
+            i2c_ok++;
+            regmapf[reg.first] = (unsigned int)val;
+        }  
+
+        DPR(DD, "\t%x = %02x\n",reg_addr, val);
+    }
+    DPR(DD, "\n");
+
+    if (!i2c_ok)
+        return DET_NOI2C;
+
+    char exec_ret[1024] = {0};
+    std::string shell = set_script_regs(veri_file, regmapi, regmapf);
+    
+    std::string eval_cmd = "/bin/bash -c " + std::string("\'") + shell + std::string("\'");
+    //std::string eval_cmd = veri_file;
+    if (0 != shell_exec(eval_cmd.c_str(), exec_ret)) {
+        ER("ar0143 evaluation error!\n");
+        return DET_NOMATCH;
+    } else {
+        score = atoi(exec_ret);
+    }
+#if 0
 
     /* should load from ar0143_cfg.xml file */
     std::vector<unsigned int> probe_iregs;
     std::vector<unsigned int> probe_fregs;
-    
+
     probe_iregs = get_cam_cfg_regs((std::string(WORK_PATH) +
         std::string("./cameras/") + std::string(drv->name) +
         std::string("_cfg.txt")).c_str(), 1);
@@ -115,6 +167,7 @@ static SCORE ar0143_probe(struct _drv_ops* drv, int bus, int slave)
     } else {
         score = atoi(exec_ret);
     }
+    #endif
 
     return score;
 }

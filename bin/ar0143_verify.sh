@@ -5,5 +5,12 @@
 # Created Time: 2020年07月04日 星期六 23时59分19秒
 #########################################################################
 #!/bin/bash
+
+#ZCREGI_9c20
+#ZCREGI_9c20
+
+vreg1=ZCREGI_9c20
+vreg2=ZCREGI_9c21
+#let "ret=${vreg1}&${vreg2}"
 echo 10
 exit 0

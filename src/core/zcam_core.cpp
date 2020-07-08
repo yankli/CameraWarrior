@@ -80,7 +80,7 @@ PDRV_OPS zcam_drv_get(int idx)
 int zcam_dev_unregister(int ch)
 {
     if (g_dev_tbl[ch] && g_dev_tbl[ch]->match_score >= 0) {
-        DPR(D, "[-] dev_%d released!!\n", ch);
+        DPR(DD, "[-] dev_%d released!!\n", ch);
         delete(g_dev_tbl[ch]);
         g_dev_tbl[ch] = NULL;
         g_dev_idx--;

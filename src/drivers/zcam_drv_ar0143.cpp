@@ -16,7 +16,7 @@ static int ar0143_ispreg_rd(struct _drv_ops* drv, int bus, int slave,
     unsigned int reg, unsigned char* val)
 {
     *val = (unsigned char)0xff;
-    DPR(DDD, "#\n");
+    DPR(DDD, "->%p, %d, %x, %x, %d#\n", drv, bus, slave, reg, *val);
     return true;
 }
 
@@ -31,8 +31,8 @@ static int ar0143_ispreg_wr(struct _drv_ops* drv, int bus, int slave,
 static int ar0143_flashreg_rd(struct _drv_ops* drv, int bus, int slave,
     unsigned int reg, unsigned char* val)
 {
-    *val = (unsigned char)0xff;
-    DPR(DDD, "#\n");
+    
+    DPR(DDD, "->%p, %d, %x, %x, %d#\n", drv, bus, slave, reg, *val);
     return true;
 }
 
@@ -200,7 +200,7 @@ DRV_OPS zcam_drv_ops_ar0143 = {
     ar0143_flash_burn,
     ar0143_probe,
     ar0143_get_version,
-    ar0143_get_version,
+    ar0143_get_userdata,
 };
 
 BOOTING_CALL_MOD(ar0143);
